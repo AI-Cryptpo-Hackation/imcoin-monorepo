@@ -8,5 +8,11 @@
   "workspaces": [
     "packages/*",
     "apps/*"
-  ]
+  ],
+  "scripts": {
+    "dev": "run-z ./apps/frontend dev"
+  },
+  "dependencies": {
+    "run-z": "^1.11.0"
+  }
 }
