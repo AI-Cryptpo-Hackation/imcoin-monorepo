@@ -1,0 +1,15 @@
+{
+  "name": "template",
+  "packageManager": "yarn@3.5.1",
+  "type": "module",
+  "version": "0.0.1",
+  "scripts": {
+    "start": "tsx src/main.ts"
+  },
+  "devDependencies": {
+    "@tsconfig/node18": "^2.0.0",
+    "@types/node": "^20.1.2",
+    "tsx": "^3.12.7",
+    "typescript": "^5.0.4"
+  }
+}

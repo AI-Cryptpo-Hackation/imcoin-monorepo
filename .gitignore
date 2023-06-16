@@ -1,0 +1,6 @@
+# Mnimal
+
+.yarn/cache
+.yarn/install-state.gz
+node_modules
+.env
