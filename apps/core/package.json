@@ -1,4 +1,13 @@
 {
   "name": "core",
-  "packageManager": "yarn@3.5.1"
+  "packageManager": "yarn@3.5.1",
+  "dependencies": {
+    "@inaridiy/hyper-objects": "^1.0.5"
+  },
+  "devDependencies": {
+    "@tsconfig/node18": "^2.0.0",
+    "@types/node": "^20.1.2",
+    "tsx": "^3.12.7",
+    "typescript": "^5.0.4"
+  }
 }
