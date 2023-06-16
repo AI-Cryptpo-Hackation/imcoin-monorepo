@@ -12,18 +12,13 @@
     "source.organizeImports": true,
     "source.fixAll.eslint": true
   },
-
   "eslint.workingDirectories": [
     {
       "mode": "auto"
     }
   ],
-  "[solidity]": {
-    "editor.defaultFormatter": "NomicFoundation.hardhat-solidity"
-  },
-  "[javascriptreact]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
+  "solidity.formatter": "forge",
+  "solidity.monoRepoSupport": true,
   "files.exclude": {
     "**/.git": true,
     "**/.svn": true,
@@ -43,8 +38,5 @@
     "**/coverage/**": true,
     "**/node_modules/**": true,
     "**/dist/**": true
-  },
-  "[jsonc]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
   }
 }
