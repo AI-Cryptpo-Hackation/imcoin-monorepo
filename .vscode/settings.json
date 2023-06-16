@@ -38,5 +38,8 @@
     "**/coverage/**": true,
     "**/node_modules/**": true,
     "**/dist/**": true
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "vscode.typescript-language-features"
   }
 }
