@@ -8,6 +8,7 @@ import { Vector3 } from 'three'
 import { Light } from './Light'
 import { RoomModel } from './RoomModel'
 import { Sphere } from './Sphere'
+import { VRM } from './VRM'
 
 export const Room = () => {
   const [bad, set] = useState(false)
@@ -27,13 +28,14 @@ export const Room = () => {
       <CameraControls makeDefault />
       <color attach='background' args={['#d0d0d0']} />
       <fog attach='fog' args={['#d0d0d0', 8, 35]} />
-      <ambientLight intensity={0.4} />
-      <Light />
+      <Light position={[5, 5, -8]} />
+      <Light position={[0, 4, 1]} />
       <RoomModel scale={0.5} position={[0, -1, 0]} />
       <Sphere />
       <Sphere position={new Vector3(2, 4, -8)} scale={0.9} />
       <Sphere position={new Vector3(-2, 2, -8)} scale={0.8} />
       <Sky inclination={0.52} />
+      <VRM url="/AvatarSample_B.vrm" />
     </Canvas>
   )
 }
