@@ -1,8 +1,16 @@
 {
   "name": "core",
+  "type": "module",
   "packageManager": "yarn@3.5.1",
+  "scripts": {
+    "start": "tsx src/main.ts"
+  },
   "dependencies": {
-    "@inaridiy/hyper-objects": "^1.0.5"
+    "@inaridiy/hyper-objects": "^1.0.5",
+    "dotenv": "^16.2.0",
+    "langchain": "^0.0.95",
+    "zod": "^3.21.4",
+    "zod-to-json-schema": "^3.21.1"
   },
   "devDependencies": {
     "@tsconfig/node18": "^2.0.0",
