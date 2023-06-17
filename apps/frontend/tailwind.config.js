@@ -1,17 +1,38 @@
-/** @type {import('tailwindcss').Config} */
+const { light, dark } = require("@charcoal-ui/theme");
+const { createTailwindConfig } = require("@charcoal-ui/tailwind-config");
+/**
+ * @type {import('tailwindcss/tailwind-config').TailwindConfig}
+ */
 module.exports = {
-  content: [
-    './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
-    './src/components/**/*.{js,ts,jsx,tsx,mdx}',
-    './src/app/**/*.{js,ts,jsx,tsx,mdx}',
+  darkMode: true,
+  content: ["./src/**/*.tsx", "./src/**/*.html"],
+  presets: [
+    createTailwindConfig({
+      version: "v3",
+      theme: {
+        ":root": light,
+      },
+    }),
   ],
   theme: {
     extend: {
-      backgroundImage: {
-        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
-        'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
+      colors: {
+        primary: "#856292",
+        "primary-hover": "#8E76A1",
+        "primary-press": "#988BB0",
+        "primary-disabled": "#6F48694D",
+        secondary: "#FF617F",
+        "secondary-hover": "#FF849B",
+        "secondary-press": "#FF9EB1",
+        "secondary-disabled": "#FF617F4D",
+        base: "#FBE2CA",
+        "text-primary": "#514062",
+      },
+      fontFamily: {
+        M_PLUS_2: ["var(--font-m-plus-2)"],
+        Montserrat: ["var(--font-montserrat)"],
       },
     },
   },
-  plugins: [],
-}
+  plugins: [require("@tailwindcss/line-clamp")],
+};

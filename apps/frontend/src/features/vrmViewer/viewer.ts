@@ -1,6 +1,10 @@
 import { loadVRMAnimation } from "@/lib/VRMAnimation/loadVRMAnimation";
+import { buildUrl } from "@/utils/buildUrl";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader';
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
+
 import { Model } from "./model";
 
 /**
@@ -33,6 +37,23 @@ export class Viewer {
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
     scene.add(ambientLight);
 
+    const dracoLoader = new DRACOLoader();
+    dracoLoader.setDecoderPath("/draco/");
+
+    const loader = new GLTFLoader();
+    loader.setDRACOLoader(dracoLoader);
+
+    // GLTF
+    loader.load(buildUrl("/room.glb"), (room) => {
+      // room scaleを小さくする
+      const roomScale = 0.13;
+      room.scene.scale.set(roomScale, roomScale, roomScale);
+
+      room.scene.position.z = 1.2;
+      room.scene.position.y = 0.2;
+      scene.add(room.scene);
+    });
+
     // animate
     this._clock = new THREE.Clock();
     this._clock.start();
@@ -55,7 +76,7 @@ export class Viewer {
 
       this._scene.add(this.model.vrm.scene);
 
-      const vrma = await loadVRMAnimation("/idle_loop.vrma");
+      const vrma = await loadVRMAnimation(buildUrl("/idle_loop.vrma"));
       if (vrma) this.model.loadAnimation(vrma);
 
       // HACK: アニメーションの原点がずれているので再生後にカメラ位置を調整する
@@ -90,7 +111,7 @@ export class Viewer {
     this._renderer.setPixelRatio(window.devicePixelRatio);
 
     // camera
-    this._camera = new THREE.PerspectiveCamera(20.0, width / height, 0.1, 20.0);
+    this._camera = new THREE.PerspectiveCamera(45.0, width / height, 0.1, 50.0);
     this._camera.position.set(0, 1.3, 1.5);
     this._cameraControls?.target.set(0, 1.3, 0);
     this._cameraControls?.update();
@@ -101,6 +122,7 @@ export class Viewer {
     );
     this._cameraControls.screenSpacePanning = true;
     this._cameraControls.update();
+
 
     window.addEventListener("resize", () => {
       this.resize();

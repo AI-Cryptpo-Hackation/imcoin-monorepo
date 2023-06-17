@@ -1,51 +1,41 @@
 {
-  "name": "frontend",
+  "name": "chat-vrm",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint -d src",
-    "lint:fix": "next lint -d src --fix",
-    "format": "prettier --write --ignore-path .gitignore './**/*.{js,jsx,ts,tsx,json}'"
+    "export": "next export",
+    "lint": "next lint"
   },
   "dependencies": {
-    "@pixiv/three-vrm": "^1.0.10",
-    "@react-three/drei": "^9.74.16",
-    "@react-three/fiber": "^8.13.3",
-    "@types/node": "20.1.7",
-    "@types/react": "18.2.6",
-    "@types/react-dom": "18.2.4",
-    "autoprefixer": "10.4.14",
-    "class-variance-authority": "^0.6.0",
-    "clsx": "^1.2.1",
-    "eslint": "8.40.0",
-    "eslint-config-next": "13.4.2",
-    "leva": "^0.9.35",
-    "lucide-react": "^0.218.0",
-    "next": "13.4.2",
-    "openai": "^3.3.0",
-    "postcss": "8.4.23",
-    "r3f-perf": "^7.1.2",
+    "@charcoal-ui/icons": "^2.6.0",
+    "@tailwindcss/line-clamp": "^0.4.4",
+    "@types/dom-speech-recognition": "^0.0.1",
+    "eslint": "8.36.0",
+    "eslint-config-next": "13.2.4",
+    "next": "13.2.4",
+    "node-fetch": "^3.3.1",
+    "openai": "^3.2.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "tailwind-merge": "^1.12.0",
-    "tailwindcss": "3.3.2",
-    "tailwindcss-animate": "^1.0.5",
-    "three": "^0.153.0",
-    "three-stdlib": "^2.23.10",
-    "typescript": "5.0.4"
+    "three": "^0.149.0",
+    "typescript": "5.0.2"
   },
   "devDependencies": {
-    "@types/three": "^0.152.1",
-    "@typescript-eslint/eslint-plugin": "^5.59.11",
-    "@typescript-eslint/parser": "^5.59.11",
-    "eslint-config-next": "^13.4.6",
-    "eslint-config-prettier": "^8.8.0",
-    "eslint-plugin-import": "^2.27.5",
-    "eslint-plugin-promise": "^6.1.1",
-    "eslint-plugin-react": "^7.32.2",
-    "prettier": "^2.8.8"
+    "@charcoal-ui/tailwind-config": "^2.6.0",
+    "@gltf-transform/core": "^2.4.6",
+    "@pixiv/three-vrm": "^1.0.9",
+    "@types/node": "18.15.10",
+    "@types/react": "18.0.29",
+    "@types/react-dom": "18.0.11",
+    "@types/three": "0.149.0",
+    "autoprefixer": "^10.4.14",
+    "postcss": "^8.4.21",
+    "tailwindcss": "^3.3.1"
+  },
+  "engines": {
+    "node": "16.14.2"
   }
 }
