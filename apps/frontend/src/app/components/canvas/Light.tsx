@@ -1,9 +1,14 @@
 import { useFrame } from '@react-three/fiber'
 import { easing } from 'maath'
-import { useRef } from 'react'
+import { FC, useRef } from 'react'
 import type { Group } from 'three'
 
-export const Light = () => {
+// LightProps
+export interface LightProps {
+  position: [number, number, number]
+}
+
+export const Light: FC<LightProps> = ({position}) => {
   const ref = useRef<Group>()
   useFrame((state, delta) => {
     if (!ref.current) {
@@ -19,13 +24,13 @@ export const Light = () => {
   return (
     <group ref={ref}>
       <directionalLight
-        position={[5, 5, -8]}
+        position={position}
         castShadow
         intensity={5}
         shadow-mapSize={2048}
         shadow-bias={-0.001}
       >
-        <orthographicCamera attach='shadow-camera' args={[-8.5, 8.5, 8.5, -8.5, 0.1, 20]} />
+        {/* <orthographicCamera attach='shadow-camera' args={[-8.5, 8.5, 8.5, -8.5, 0.1, 20]} /> */}
       </directionalLight>
     </group>
   )
