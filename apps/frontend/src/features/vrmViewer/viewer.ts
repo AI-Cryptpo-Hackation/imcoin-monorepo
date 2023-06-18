@@ -1,11 +1,28 @@
 import { loadVRMAnimation } from "@/lib/VRMAnimation/loadVRMAnimation";
 import { buildUrl } from "@/utils/buildUrl";
+import html2canvas from "html2canvas";
+import { createChart } from 'lightweight-charts';
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader';
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 
 import { Model } from "./model";
+
+const html2texture = async (htmlElement: HTMLElement): Promise<THREE.Texture> => {
+  const canvas = await html2canvas(htmlElement);
+  console.log(htmlElement);
+  const texture = new THREE.CanvasTexture(canvas);
+  texture.needsUpdate = true;
+  console.log(`html2canvas #################`);
+  console.log(canvas);
+  console.log(texture);
+  return texture;
+}
+
+const formatYYYYMMDD = (date: Date): string => {
+ return date.toISOString().split('T')[0]
+}
 
 /**
  * three.jsを使った3Dビューワー
@@ -43,7 +60,7 @@ export class Viewer {
     const loader = new GLTFLoader();
     loader.setDRACOLoader(dracoLoader);
 
-    // GLTF
+    // 部屋の読み込み
     loader.load(buildUrl("/room.glb"), (room) => {
       // room scaleを小さくする
       const roomScale = 0.13;
@@ -123,6 +140,57 @@ export class Viewer {
     this._cameraControls.screenSpacePanning = true;
     this._cameraControls.update();
 
+    // chart
+    const chartElement = document.createElement("div");
+    chartElement.style.width = "200px";
+    chartElement.style.height = "100px";
+    // display none的な感じで表示されないけど、スクショできる
+    chartElement.style.clipPath = "inset(0 100% 0 0)";
+    const chartOptions = { layout: { textColor: 'white', background: {color: '#141414'}}, width: 200, height: 100, timeScale: { timeVisible: true, secondsVisible: false } };
+
+    const chart = createChart(chartElement, chartOptions);
+    const candlestickSeries = chart.addCandlestickSeries({
+      upColor: '#26a69a', downColor: '#ef5350', borderVisible: false,
+      wickUpColor: '#26a69a', wickDownColor: '#ef5350',
+    });
+
+    chartElement.style.border = "solid 1px black";
+
+    document.body.appendChild(chartElement);
+
+    // 今日の日付
+    let datetimeStr = formatYYYYMMDD(new Date());
+
+    setInterval(() => {
+      // TODO: APIでいい感じの価格データを取得する
+
+      // 100~300のランダムな値を生成
+      const random = Math.floor(Math.random() * (300 - 100 + 1)) + 100;
+      const open = Math.floor(Math.random() * (random - 100 + 1)) + 100;
+      const close = Math.floor(Math.random() * (random - 100 + 1)) + 100;
+      const high = Math.floor(Math.random() * (random - 100 + 1)) + 100;
+      const low = Math.floor(Math.random() * (random - 100 + 1)) + 100;
+      const date = new Date(datetimeStr);
+      date.setDate(date.getDate() + 1);
+      datetimeStr = formatYYYYMMDD(date);
+      
+      candlestickSeries.update({ time: datetimeStr, open, close, high, low });
+      // グラフがレンダリングされた後じゃないと何も映らないので遅らせる
+      setTimeout(() => {
+        html2texture(chartElement).then((texture) => {
+          // 色が白っぽくなるので調整
+          texture.encoding = THREE.sRGBEncoding;
+          const material = new THREE.MeshBasicMaterial({map: texture});
+          const geometry = new THREE.PlaneGeometry(2, 1);
+          
+          const mesh = new THREE.Mesh(geometry, material);
+          mesh.position.set(-1.7, 1, 1);
+          mesh.rotation.y = Math.PI / 2;
+
+          this._scene.add(mesh);
+        });
+      }, 1000);
+    }, 2000);
 
     window.addEventListener("resize", () => {
       this.resize();
