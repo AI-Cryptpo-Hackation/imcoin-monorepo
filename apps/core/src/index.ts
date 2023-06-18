@@ -80,7 +80,7 @@ export const executeAITuber = async (options: ExecuteAITuberOptions) => {
         new FunctionChatMessage(tokens[0], toolNames),
       ];
     } catch (e) {
-      console.error(e.toJSON ? e.toJSON() : e);
+      console.error(e);
       continue;
     }
   }
