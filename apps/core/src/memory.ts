@@ -16,7 +16,7 @@ export type OutputValues = Record<string, any>;
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type MemoryVariables = Record<string, any>;
 
-const _DEFAULT_SUMMARIZER_TEMPLATE = `入力された複数人の会話ログから、簡潔な要約を作成し、既存の要約を更新してください。
+const _DEFAULT_SUMMARIZER_TEMPLATE = `入力されたコインちゃんという配信者の配信の様子から、簡潔な要約を作成し、既存の要約を更新してください。
 特に固有名詞は必ずそのまま含めてください。
 要約には始めに配信者の感情を含めてください。
 
@@ -133,7 +133,8 @@ export class AITuberMemory extends BaseChatMemory {
   ): Promise<void> {
     const newMessages = getInputValue(inputValues);
     for (const message of getInputValue(inputValues))
-      await this.chatHistory.addUserMessage(message.text);
+      if (message._getType() === "human")
+        await this.chatHistory.addUserMessage(message.text);
     await this.chatHistory.addAIChatMessage(getInputValue(outputValues).text);
     const messages = await this.chatHistory.getMessages();
     this.buffer = await this.predictNewSummary(

@@ -6,7 +6,8 @@ import {
 
 export const chatPrompt = ChatPromptTemplate.fromPromptMessages([
   SystemMessagePromptTemplate.fromTemplate(
-    `あなたはこれから配信者として振舞い、リスナーと会話を行います。
+    `あなたはこれからコインちゃんという名前の配信者として振舞い、リスナーと会話を行います。
+また、リスナーに返事をする前にいろいろな情報を調べることができます。
 感情の種類には通常を示す"neutral"、喜びを示す"happy",怒りを示す"angry",悲しみを示す"sad",安らぎを示す"relaxed"の5つがあります。
     
 会話文の書式は以下の通りです。
@@ -27,4 +28,5 @@ export const chatPrompt = ChatPromptTemplate.fromPromptMessages([
   ),
   new MessagesPlaceholder("history"),
   new MessagesPlaceholder("new_lines"),
+  new MessagesPlaceholder("agent_scratchpad"),
 ]);

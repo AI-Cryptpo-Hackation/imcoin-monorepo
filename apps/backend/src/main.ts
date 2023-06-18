@@ -23,9 +23,7 @@ io.on("connection", async (socket) => {
     await Comment.send(data);
   });
   socket.on("ai-interact", async (data) => {
-    const liverState = await Liver.execute();
-    io.emit("liver-update", liverState.snapshot());
-    console.log("Liver executed", liverState.snapshot());
+    await Liver.execute();
   });
 });
 
@@ -33,13 +31,6 @@ Comment.on("new", (comment) => {
   io.emit("comment", comment.snapshot());
 });
 
-const startLiver = async () => {
-  const liverState = await Liver.execute();
-  io.emit("liver-update", liverState.snapshot());
-
-  const nextExecuteTime = Math.random() * 20 * 1000;
-
-  setTimeout(startLiver, nextExecuteTime);
-};
-
-// startLiver();
+Liver.on("new", (liver) => {
+  io.emit("liver-update", liver.snapshot());
+});

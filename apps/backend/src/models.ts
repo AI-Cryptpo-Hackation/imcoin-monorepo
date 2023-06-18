@@ -2,7 +2,7 @@ import { HyperObject } from "@inaridiy/hyper-objects";
 import { executeAITuber } from "core";
 import { HumanChatMessage } from "langchain/schema";
 import { $object, $string, Infer } from "lizod";
-import { tuberModel } from "./env";
+import { embeddings, tuberModel } from "./env";
 
 export interface SendCommentCommand {
   address: string;
@@ -70,18 +70,23 @@ export class Liver extends HyperObject<LiverProps> {
     const lastExecuteTime = last?.props.createdAt || new Date(0);
     const comments = await Comment.query().gt("createdAt", lastExecuteTime);
 
-    const { text, summarize } = await executeAITuber(
-      tuberModel(),
-      comments.map((comment) => comment.toHumanChatMessage()),
-      last?.props.summarize || ""
-    );
+    const onLiverSay = (text: string) => {
+      console.log("Liver said:", text);
+      Liver.new({
+        response: text,
+        summarize: last?.props.summarize || "",
+        createdAt: new Date(),
+      });
+    };
 
-    const liver = await Liver.new({
-      response: text,
-      summarize,
-      createdAt: new Date(),
+    const { summarize } = await executeAITuber({
+      model: tuberModel(),
+      embeddings: embeddings(),
+      messages: comments.map((comment) => comment.toHumanChatMessage()),
+      summarize: last?.props.summarize || "",
+      onMessage: onLiverSay,
     });
 
-    return liver;
+    console.log("Liver summarized:", summarize);
   }
 }
