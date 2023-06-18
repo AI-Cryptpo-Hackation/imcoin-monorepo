@@ -1,4 +1,3 @@
-import { GitHubLink } from "@/components/githubLink";
 import { Introduction } from "@/components/introduction";
 import { Menu } from "@/components/menu";
 import { MessageInputContainer } from "@/components/messageInputContainer";
@@ -15,7 +14,7 @@ import {
 import { speakCharacter } from "@/features/messages/speakCharacter";
 import { ViewerContext } from "@/features/vrmViewer/viewerContext";
 import { M_PLUS_2, Montserrat } from "next/font/google";
-import { useCallback, useContext, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 
 const m_plus_2 = M_PLUS_2({
   variable: "--font-m-plus-2",
@@ -218,7 +217,6 @@ export default function Home() {
         handleClickResetChatLog={() => setChatLog([])}
         handleClickResetSystemPrompt={() => setSystemPrompt(SYSTEM_PROMPT)}
       />
-      <GitHubLink />
     </div>
   );
 }

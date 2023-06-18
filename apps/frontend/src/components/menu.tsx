@@ -1,11 +1,11 @@
-import { IconButton } from "./iconButton";
-import { Message } from "@/features/messages/messages";
 import { KoeiroParam } from "@/features/constants/koeiroParam";
-import { ChatLog } from "./chatLog";
-import React, { useCallback, useContext, useRef, useState } from "react";
-import { Settings } from "./settings";
+import { Message } from "@/features/messages/messages";
 import { ViewerContext } from "@/features/vrmViewer/viewerContext";
+import React, { useCallback, useContext, useRef, useState } from "react";
 import { AssistantText } from "./assistantText";
+import { ChatLog } from "./chatLog";
+import { IconButton } from "./iconButton";
+import { Settings } from "./settings";
 
 type Props = {
   openAiKey: string;
@@ -133,6 +133,7 @@ export const Menu = ({
         />
       )}
       {!showChatLog && assistantMessage && (
+        // TODO actionを差し込む
         <AssistantText message={assistantMessage} />
       )}
       <input
