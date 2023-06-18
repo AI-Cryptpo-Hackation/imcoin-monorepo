@@ -29,6 +29,7 @@ const montserrat = Montserrat({
   subsets: ["latin"],
 });
 
+// TODO: モックデータを削除する
 const mockedComments = [
   {
     id: 1,
@@ -372,6 +373,7 @@ export default function Home() {
         handleClickResetChatLog={() => setChatLog([])}
         handleClickResetSystemPrompt={() => setSystemPrompt(SYSTEM_PROMPT)}
       />
+      {/* TODO: モックやめる */}
       <CommentList comments={mockedComments} />
     </div>
   );
