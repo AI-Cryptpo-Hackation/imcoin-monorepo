@@ -11,12 +11,8 @@ import { Model } from "./model";
 
 const html2texture = async (htmlElement: HTMLElement): Promise<THREE.Texture> => {
   const canvas = await html2canvas(htmlElement);
-  console.log(htmlElement);
   const texture = new THREE.CanvasTexture(canvas);
   texture.needsUpdate = true;
-  console.log(`html2canvas #################`);
-  console.log(canvas);
-  console.log(texture);
   return texture;
 }
 
