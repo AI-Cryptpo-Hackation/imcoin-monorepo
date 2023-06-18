@@ -1,3 +1,4 @@
+import { CommentList } from "@/components/commentList";
 import { Introduction } from "@/components/introduction";
 import { Menu } from "@/components/menu";
 import { MessageInputContainer } from "@/components/messageInputContainer";
@@ -14,7 +15,7 @@ import {
 import { speakCharacter } from "@/features/messages/speakCharacter";
 import { ViewerContext } from "@/features/vrmViewer/viewerContext";
 import { M_PLUS_2, Montserrat } from "next/font/google";
-import React, { useCallback, useContext, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 
 const m_plus_2 = M_PLUS_2({
   variable: "--font-m-plus-2",
@@ -27,6 +28,160 @@ const montserrat = Montserrat({
   display: "swap",
   subsets: ["latin"],
 });
+
+const mockedComments = [
+  {
+    id: 1,
+    text: "Hello, world! Hello, world! Hello, world! Hello, world!",
+    author: "John Doe",
+    profileImageUrl: "https://i.pravatar.cc/300?img=1",
+  },
+  {
+    id: 2,
+    text: "This is a comment",
+    author: "Jane Doe",
+    profileImageUrl: "https://i.pravatar.cc/300?img=2",
+  },
+  {
+    id: 3,
+    text: "Another comment",
+    author: "John Doe",
+    profileImageUrl: "https://i.pravatar.cc/300?img=3",
+  },
+  {
+    id: 4,
+    text: "Yet another comment",
+    author: "Jane Doe",
+    profileImageUrl: "https://i.pravatar.cc/300?img=4",
+  },
+  {
+    id: 5,
+    text: "And one more",
+    author: "John Doe",
+    profileImageUrl: "https://i.pravatar.cc/300?img=5",
+  },
+  {
+    id: 6,
+    text: "Hello, world! Hello, world! Hello, world! Hello, world!",
+    author: "John Doe",
+    profileImageUrl: "https://i.pravatar.cc/300?img=1",
+  },
+  {
+    id: 7,
+    text: "This is a comment",
+    author: "Jane Doe",
+    profileImageUrl: "https://i.pravatar.cc/300?img=2",
+  },
+  {
+    id: 8,
+    text: "Another comment",
+    author: "John Doe",
+    profileImageUrl: "https://i.pravatar.cc/300?img=3",
+  },
+  {
+    id: 9,
+    text: "Yet another comment",
+    author: "Jane Doe",
+    profileImageUrl: "https://i.pravatar.cc/300?img=4",
+  },
+  {
+    id: 10,
+    text: "And one more",
+    author: "John Doe",
+    profileImageUrl: "https://i.pravatar.cc/300?img=5",
+  },
+  {
+    id: 11,
+    text: "Hello, world! Hello, world! Hello, world! Hello, world!",
+    author: "John Doe",
+    profileImageUrl: "https://i.pravatar.cc/300?img=1",
+  },
+  {
+    id: 12,
+    text: "This is a comment",
+    author: "Jane Doe",
+    profileImageUrl: "https://i.pravatar.cc/300?img=2",
+  },
+  {
+    id: 13,
+    text: "Another comment",
+    author: "John Doe",
+    profileImageUrl: "https://i.pravatar.cc/300?img=3",
+  },
+  {
+    id: 14,
+    text: "Yet another comment",
+    author: "Jane Doe",
+    profileImageUrl: "https://i.pravatar.cc/300?img=4",
+  },
+  {
+    id: 15,
+    text: "And one more",
+    author: "John Doe",
+    profileImageUrl: "https://i.pravatar.cc/300?img=5",
+  },
+  {
+    id: 16,
+    text: "Hello, world! Hello, world! Hello, world! Hello, world!",
+    author: "John Doe",
+    profileImageUrl: "https://i.pravatar.cc/300?img=1",
+  },
+  {
+    id: 17,
+    text: "This is a comment",
+    author: "Jane Doe",
+    profileImageUrl: "https://i.pravatar.cc/300?img=2",
+  },
+  {
+    id: 18,
+    text: "Another comment",
+    author: "John Doe",
+    profileImageUrl: "https://i.pravatar.cc/300?img=3",
+  },
+  {
+    id: 19,
+    text: "Yet another comment",
+    author: "Jane Doe",
+    profileImageUrl: "https://i.pravatar.cc/300?img=4",
+  },
+  {
+    id: 20,
+    text: "And one more",
+    author: "John Doe",
+    profileImageUrl: "https://i.pravatar.cc/300?img=5",
+  },
+  {
+    id: 21,
+    text: "Hello, world! Hello, world! Hello, world! Hello, world!",
+    author: "John Doe",
+    profileImageUrl: "https://i.pravatar.cc/300?img=1",
+  },
+  {
+    id: 22,
+    text: "This is a comment",
+    author: "Jane Doe",
+    profileImageUrl: "https://i.pravatar.cc/300?img=2",
+  },
+  {
+    id: 23,
+    text: "Another comment",
+    author: "John Doe",
+    profileImageUrl: "https://i.pravatar.cc/300?img=3",
+  },
+  {
+    id: 24,
+    text: "Yet another comment",
+    author: "Jane Doe",
+    profileImageUrl: "https://i.pravatar.cc/300?img=4",
+  },
+  {
+    id: 25,
+    text: "And one more",
+    author: "John Doe",
+    profileImageUrl: "https://i.pravatar.cc/300?img=5",
+  }
+];
+
 
 export default function Home() {
   const { viewer } = useContext(ViewerContext);
@@ -217,6 +372,7 @@ export default function Home() {
         handleClickResetChatLog={() => setChatLog([])}
         handleClickResetSystemPrompt={() => setSystemPrompt(SYSTEM_PROMPT)}
       />
+      <CommentList comments={mockedComments} />
     </div>
   );
 }
