@@ -22,7 +22,7 @@ io.on("connection", async (socket) => {
   socket.on("send-comment", async (data) => {
     await Comment.send(data);
   });
-  socket.on("ai-interact", async (data) => {
+  socket.on("ai-interact", async () => {
     await Liver.execute();
   });
 });

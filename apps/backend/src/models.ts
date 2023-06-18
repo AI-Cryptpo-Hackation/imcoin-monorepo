@@ -2,7 +2,8 @@ import { HyperObject } from "@inaridiy/hyper-objects";
 import { executeAITuber } from "core";
 import { HumanChatMessage } from "langchain/schema";
 import { $object, $string, Infer } from "lizod";
-import { embeddings, tuberModel } from "./env";
+import { embeddings, toolModel, tuberModel } from "./env";
+import { getBalance } from "./libs";
 
 export interface SendCommentCommand {
   address: string;
@@ -24,8 +25,7 @@ export class Comment extends HyperObject<CommentProps> {
   static type = "comment";
   static schema = CommentSchema;
 
-  prompt = `{username}:
-{text}`;
+  prompt = `{username}: {address}: {balance}CTN: {text}`;
 
   static async send(command: SendCommentCommand) {
     const comment = await Comment.new({
@@ -47,7 +47,8 @@ export class Comment extends HyperObject<CommentProps> {
     return new HumanChatMessage(
       this.prompt
         .replace("{username}", this.props.username)
-        //      .replace("{address}", this.props.address)
+        .replace("{address}", this.props.address)
+        .replace("{balance}", getBalance(this.props.address).toString())
         .replace("{text}", this.props.text)
     );
   }
@@ -81,6 +82,7 @@ export class Liver extends HyperObject<LiverProps> {
 
     const { summarize } = await executeAITuber({
       model: tuberModel(),
+      modelForTools: toolModel(),
       embeddings: embeddings(),
       messages: comments.map((comment) => comment.toHumanChatMessage()),
       summarize: last?.props.summarize || "",
