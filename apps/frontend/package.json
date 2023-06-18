@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@charcoal-ui/icons": "^2.6.0",
+    "@rainbow-me/rainbowkit": "^1.0.2",
     "@tailwindcss/line-clamp": "^0.4.4",
     "@types/dom-speech-recognition": "^0.0.1",
     "eslint": "8.36.0",
@@ -23,7 +24,9 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "three": "^0.149.0",
-    "typescript": "5.0.2"
+    "typescript": "5.0.2",
+    "viem": "^1.0.7",
+    "wagmi": "^1.2.0"
   },
   "devDependencies": {
     "@charcoal-ui/tailwind-config": "^2.6.0",
