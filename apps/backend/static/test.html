@@ -9,16 +9,39 @@
     <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
 
     <script>
-      const socket = io("http://localhost:3000");
+      const socket = io(new URL(location.href).origin);
       socket.on("connect", () => {
         console.log(socket.id); // x8WIv7-mJelg7on_ALbx
       });
       socket.on("event", (data) => {});
       socket.on("disconnect", () => {});
 
-      socket.on("message", (data) => {
+      socket.on("hello", (data) => {
         console.log(data);
       });
+      socket.on("history", (data) => {
+        console.log(data);
+      });
+
+      socket.on("comment", (data) => {
+        console.log(data.username + ":" + data.text);
+      });
+
+      socket.on("liver-update", (data) => {
+        console.log("配信者:" + data.response);
+      });
+
+      const ai = () => {
+        socket.emit("ai-interact");
+      };
+
+      const sendComment = (name, msg) => {
+        socket.emit("send-comment", {
+          address: "0xB9825fcB2aFD2ad9047a78b2422a5D888b2E54DA",
+          username: name,
+          text: msg,
+        });
+      };
     </script>
   </body>
 </html>

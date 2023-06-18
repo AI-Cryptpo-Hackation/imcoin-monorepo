@@ -7,10 +7,12 @@
   },
   "dependencies": {
     "@hono/node-server": "^1.0.2",
-    "@inaridiy/hyper-objects": "^1.0.5",
+    "@inaridiy/hyper-objects": "^1.0.7",
     "better-sqlite3": "^8.4.0",
+    "core": "workspace:^",
     "dotenv": "^16.3.1",
     "hono": "^3.2.5",
+    "langchain": "^0.0.95",
     "lizod": "^0.2.4",
     "socket.io": "^4.6.2"
   },

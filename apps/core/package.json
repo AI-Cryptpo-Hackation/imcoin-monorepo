@@ -2,6 +2,8 @@
   "name": "core",
   "type": "module",
   "packageManager": "yarn@3.5.1",
+  "types": "./src/index.ts",
+  "main": "./src/index.ts",
   "scripts": {
     "start": "tsx src/main.ts"
   },

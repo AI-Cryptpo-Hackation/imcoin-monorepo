@@ -4,3 +4,4 @@
 .yarn/install-state.gz
 node_modules
 .env
+db.sqlite

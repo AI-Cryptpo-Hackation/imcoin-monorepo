@@ -19,6 +19,8 @@ export const executeAITuber = async (
     new_lines: messages,
   });
 
+  console.log(prompt.toChatMessages());
+
   const response = await model.predictMessages(prompt.toChatMessages());
   await memory.saveContext(
     { messages: prompt.toChatMessages() },
@@ -29,6 +31,6 @@ export const executeAITuber = async (
     text: response.text,
     summarize: await memory
       .loadMemoryVariables({})
-      .then((v) => v["history"][0].text),
+      .then((v) => v["history"][0].text as string),
   };
 };
