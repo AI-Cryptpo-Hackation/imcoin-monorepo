@@ -5,12 +5,12 @@ import "@charcoal-ui/icons";
 import { RainbowKitProvider, getDefaultWallets } from "@rainbow-me/rainbowkit";
 import type { AppProps } from "next/app";
 import { WagmiConfig, configureChains, createConfig } from "wagmi";
-import { arbitrum, mainnet, optimism, polygon } from 'wagmi/chains';
+import { polygonMumbai } from 'wagmi/chains';
 import { publicProvider } from 'wagmi/providers/public';
 
 
 const { chains, publicClient } = configureChains(
-  [mainnet, polygon, optimism, arbitrum],
+  [polygonMumbai],
   [
     publicProvider()
   ]

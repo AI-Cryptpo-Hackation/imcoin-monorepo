@@ -14,6 +14,7 @@ import {
 } from "@/features/messages/messages";
 import { speakCharacter } from "@/features/messages/speakCharacter";
 import { ViewerContext } from "@/features/vrmViewer/viewerContext";
+import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { M_PLUS_2, Montserrat } from "next/font/google";
 import { useCallback, useContext, useEffect, useState } from "react";
 
@@ -375,6 +376,9 @@ export default function Home() {
       />
       {/* TODO: モックやめる */}
       <CommentList comments={mockedComments} />
+      <div className="absolute top-16 right-16">
+        <ConnectButton/>
+      </div>
     </div>
   );
 }
