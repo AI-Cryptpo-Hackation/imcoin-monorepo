@@ -18,10 +18,10 @@ export const AssistantText = ({ message, action = 'コメントユーザー全�
             <div className="flex items-center h-full flex-grow">
               <div className="text-white mx-8 font-bold text-xl">＞</div>
               <div>
-                <div className="p-4 line-clamp-4 text-white opacity-100 text-secondary typography-16 font-M_PLUS_2 font-bold">
+                <div className="p-4 line-clamp-4 text-white opacity-100 typography-16 font-M_PLUS_2 font-bold">
                   行動
                 </div>
-                <div className="p-8 line-clamp-4 text-white opacity-100 text-secondary typography-16 font-M_PLUS_2">
+                <div className="p-8 line-clamp-4 text-white opacity-100 typography-16 font-M_PLUS_2">
                   {action}
                 </div>
               </div>
