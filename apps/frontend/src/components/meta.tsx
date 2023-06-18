@@ -1,7 +1,6 @@
-import { buildUrl } from "@/utils/buildUrl";
 import Head from "next/head";
 export const Meta = () => {
-  const title = "ChatVRM";
+  const title = "汎用人格搭載電子通貨「I’m Coin」";
   const description =
     "Webブラウザだけで3Dキャラクターとの会話を、マイクやテキスト入力、音声合成を用いて楽しめます。キャラクター（VRM）の変更や性格設定、音声調整もできます。";
   const imageUrl = "https://pixiv.github.io/ChatVRM/ogp.png";
