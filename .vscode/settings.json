@@ -17,7 +17,7 @@
       "mode": "auto"
     }
   ],
-  "solidity.formatter": "forge",
+  "solidity.formatter": "prettier",
   "solidity.monoRepoSupport": true,
   "files.exclude": {
     "**/.git": true,
