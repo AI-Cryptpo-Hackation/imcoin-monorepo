@@ -1,1 +1,0 @@
-import {HyperObject} from "@inaridiy/hyper-objects"

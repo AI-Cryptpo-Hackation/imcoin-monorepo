@@ -1,12 +1,25 @@
 {
   "name": "core",
+  "type": "module",
   "packageManager": "yarn@3.5.1",
+  "types": "./src/index.ts",
+  "main": "./src/index.ts",
+  "scripts": {
+    "start": "tsx src/main.ts"
+  },
   "dependencies": {
-    "@inaridiy/hyper-objects": "^1.0.5"
+    "@inaridiy/hyper-objects": "^1.0.5",
+    "@mozilla/readability": "^0.4.4",
+    "cheerio": "^1.0.0-rc.12",
+    "dotenv": "^16.2.0",
+    "jsdom": "^22.1.0",
+    "langchain": "^0.0.95",
+    "zod": "^3.21.4",
+    "zod-to-json-schema": "^3.21.1"
   },
   "devDependencies": {
     "@tsconfig/node18": "^2.0.0",
-    "@types/node": "^20.1.2",
+    "@types/node": "^20.3.1",
     "tsx": "^3.12.7",
     "typescript": "^5.0.4"
   }

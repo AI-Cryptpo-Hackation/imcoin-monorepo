@@ -1,4 +1,25 @@
 {
   "name": "backend",
-  "packageManager": "yarn@3.5.1"
+  "packageManager": "yarn@3.5.1",
+  "type": "module",
+  "scripts": {
+    "start": "tsx src/main.ts"
+  },
+  "dependencies": {
+    "@hono/node-server": "^1.0.2",
+    "@inaridiy/hyper-objects": "^1.0.7",
+    "better-sqlite3": "^8.4.0",
+    "core": "workspace:^",
+    "dotenv": "^16.3.1",
+    "hono": "^3.2.5",
+    "langchain": "^0.0.95",
+    "lizod": "^0.2.4",
+    "socket.io": "^4.6.2"
+  },
+  "devDependencies": {
+    "@tsconfig/node18": "^2.0.0",
+    "@types/node": "^20.1.2",
+    "tsx": "^3.12.7",
+    "typescript": "^5.0.4"
+  }
 }
