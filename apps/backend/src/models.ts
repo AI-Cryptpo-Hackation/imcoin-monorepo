@@ -40,7 +40,8 @@ export class Comment extends HyperObject<CommentProps> {
 
   static async getHistorySnapshot() {
     const comments = await Comment.query().order("createdAt", "desc").limit(20);
-    return comments.map((c) => c.snapshot());
+    // YouTubeとかに習ってASCにする
+    return comments.map((c) => c.snapshot()).reverse();
   }
 
   toHumanChatMessage() {

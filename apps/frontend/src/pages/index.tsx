@@ -1,10 +1,9 @@
-import { CommentList } from "@/components/commentList";
+import { Comment, CommentList } from "@/components/commentList";
 import { Introduction } from "@/components/introduction";
 import { Menu } from "@/components/menu";
 import { MessageInputContainer } from "@/components/messageInputContainer";
 import { Meta } from "@/components/meta";
 import VrmViewer from "@/components/vrmViewer";
-import { getChatResponseStream } from "@/features/chat/openAiChat";
 import { DEFAULT_PARAM, KoeiroParam } from "@/features/constants/koeiroParam";
 import { SYSTEM_PROMPT } from "@/features/constants/systemPromptConstants";
 import {
@@ -14,9 +13,13 @@ import {
 } from "@/features/messages/messages";
 import { speakCharacter } from "@/features/messages/speakCharacter";
 import { ViewerContext } from "@/features/vrmViewer/viewerContext";
-import { ConnectButton } from '@rainbow-me/rainbowkit';
+import { ConnectButton, } from '@rainbow-me/rainbowkit';
 import { M_PLUS_2, Montserrat } from "next/font/google";
 import { useCallback, useContext, useEffect, useState } from "react";
+import { Socket, io } from "socket.io-client";
+import { useAccount } from 'wagmi';
+
+const CHAT_ENDPOINT = process.env.NEXT_PUBLIC_CHAT_ENDPOINT || 'http://localhost:3001';
 
 const m_plus_2 = M_PLUS_2({
   variable: "--font-m-plus-2",
@@ -30,161 +33,6 @@ const montserrat = Montserrat({
   subsets: ["latin"],
 });
 
-// TODO: モックデータを削除する
-const mockedComments = [
-  {
-    id: 1,
-    text: "Hello, world! Hello, world! Hello, world! Hello, world!",
-    author: "John Doe",
-    profileImageUrl: "https://i.pravatar.cc/300?img=1",
-  },
-  {
-    id: 2,
-    text: "This is a comment",
-    author: "Jane Doe",
-    profileImageUrl: "https://i.pravatar.cc/300?img=2",
-  },
-  {
-    id: 3,
-    text: "Another comment",
-    author: "John Doe",
-    profileImageUrl: "https://i.pravatar.cc/300?img=3",
-  },
-  {
-    id: 4,
-    text: "Yet another comment",
-    author: "Jane Doe",
-    profileImageUrl: "https://i.pravatar.cc/300?img=4",
-  },
-  {
-    id: 5,
-    text: "And one more",
-    author: "John Doe",
-    profileImageUrl: "https://i.pravatar.cc/300?img=5",
-  },
-  {
-    id: 6,
-    text: "Hello, world! Hello, world! Hello, world! Hello, world!",
-    author: "John Doe",
-    profileImageUrl: "https://i.pravatar.cc/300?img=1",
-  },
-  {
-    id: 7,
-    text: "This is a comment",
-    author: "Jane Doe",
-    profileImageUrl: "https://i.pravatar.cc/300?img=2",
-  },
-  {
-    id: 8,
-    text: "Another comment",
-    author: "John Doe",
-    profileImageUrl: "https://i.pravatar.cc/300?img=3",
-  },
-  {
-    id: 9,
-    text: "Yet another comment",
-    author: "Jane Doe",
-    profileImageUrl: "https://i.pravatar.cc/300?img=4",
-  },
-  {
-    id: 10,
-    text: "And one more",
-    author: "John Doe",
-    profileImageUrl: "https://i.pravatar.cc/300?img=5",
-  },
-  {
-    id: 11,
-    text: "Hello, world! Hello, world! Hello, world! Hello, world!",
-    author: "John Doe",
-    profileImageUrl: "https://i.pravatar.cc/300?img=1",
-  },
-  {
-    id: 12,
-    text: "This is a comment",
-    author: "Jane Doe",
-    profileImageUrl: "https://i.pravatar.cc/300?img=2",
-  },
-  {
-    id: 13,
-    text: "Another comment",
-    author: "John Doe",
-    profileImageUrl: "https://i.pravatar.cc/300?img=3",
-  },
-  {
-    id: 14,
-    text: "Yet another comment",
-    author: "Jane Doe",
-    profileImageUrl: "https://i.pravatar.cc/300?img=4",
-  },
-  {
-    id: 15,
-    text: "And one more",
-    author: "John Doe",
-    profileImageUrl: "https://i.pravatar.cc/300?img=5",
-  },
-  {
-    id: 16,
-    text: "Hello, world! Hello, world! Hello, world! Hello, world!",
-    author: "John Doe",
-    profileImageUrl: "https://i.pravatar.cc/300?img=1",
-  },
-  {
-    id: 17,
-    text: "This is a comment",
-    author: "Jane Doe",
-    profileImageUrl: "https://i.pravatar.cc/300?img=2",
-  },
-  {
-    id: 18,
-    text: "Another comment",
-    author: "John Doe",
-    profileImageUrl: "https://i.pravatar.cc/300?img=3",
-  },
-  {
-    id: 19,
-    text: "Yet another comment",
-    author: "Jane Doe",
-    profileImageUrl: "https://i.pravatar.cc/300?img=4",
-  },
-  {
-    id: 20,
-    text: "And one more",
-    author: "John Doe",
-    profileImageUrl: "https://i.pravatar.cc/300?img=5",
-  },
-  {
-    id: 21,
-    text: "Hello, world! Hello, world! Hello, world! Hello, world!",
-    author: "John Doe",
-    profileImageUrl: "https://i.pravatar.cc/300?img=1",
-  },
-  {
-    id: 22,
-    text: "This is a comment",
-    author: "Jane Doe",
-    profileImageUrl: "https://i.pravatar.cc/300?img=2",
-  },
-  {
-    id: 23,
-    text: "Another comment",
-    author: "John Doe",
-    profileImageUrl: "https://i.pravatar.cc/300?img=3",
-  },
-  {
-    id: 24,
-    text: "Yet another comment",
-    author: "Jane Doe",
-    profileImageUrl: "https://i.pravatar.cc/300?img=4",
-  },
-  {
-    id: 25,
-    text: "And one more",
-    author: "John Doe",
-    profileImageUrl: "https://i.pravatar.cc/300?img=5",
-  }
-];
-
-
 export default function Home() {
   const { viewer } = useContext(ViewerContext);
 
@@ -194,6 +42,9 @@ export default function Home() {
   const [chatProcessing, setChatProcessing] = useState(false);
   const [chatLog, setChatLog] = useState<Message[]>([]);
   const [assistantMessage, setAssistantMessage] = useState("");
+  const [socket, setSocket] = useState<Socket | null>(null);
+  const [liveChat, setLiveChat] = useState<Comment[]>([]);
+  const { address } = useAccount();
 
   useEffect(() => {
     if (window.localStorage.getItem("chatVRMParams")) {
@@ -203,6 +54,87 @@ export default function Home() {
       setSystemPrompt(params.systemPrompt);
       setKoeiroParam(params.koeiroParam);
       setChatLog(params.chatLog);
+    }
+
+    const _socket = io(CHAT_ENDPOINT);
+    _socket.on('history', (messages: Comment[]) => {
+      // TODO: 消す
+      messages.forEach(message => {
+        const randomInt = Math.floor(Math.random() * 10);
+        message.profileImageUrl = `https://i.pravatar.cc/300?img=${randomInt}`;
+      })
+
+      setLiveChat(messages);
+    });
+
+    _socket.on('comment', (message: Comment) => {
+      // TODO: 消す
+      const randomInt = Math.floor(Math.random() * 10);
+      message.profileImageUrl = `https://i.pravatar.cc/300?img=${randomInt}`;
+      setLiveChat(prev => [...prev, message]);
+    });
+
+    _socket.on("liver-update", (message: any) => {
+      let {response: receivedMessage} = message;
+      try {
+        if (receivedMessage == null) {
+          setChatProcessing(false);
+          return;
+        }
+      
+        let aiTextLog = "";
+        let tag = "";
+        const sentences = new Array<string>();
+      
+        // Detecting tag in the response content
+        const tagMatch = receivedMessage.match(/^\[(.*?)\]/);
+        if (tagMatch && tagMatch[0]) {
+          tag = tagMatch[0];
+          receivedMessage = receivedMessage.slice(tag.length);
+        }
+      
+        // Processing the response sentence by sentence
+        const sentenceMatch = receivedMessage.match(
+          /^(.+[。．！？\n]|.{10,}[、,])/
+        );
+        if (sentenceMatch && sentenceMatch[0]) {
+          const sentence = sentenceMatch[0];
+          sentences.push(sentence);
+          receivedMessage = receivedMessage
+            .slice(sentence.length)
+            .trimStart();
+      
+          // Skip if the string was unpronounceable/unneeded for utterance
+          const sentenceTrimmed = sentence.replace(
+            /^[\s\[\(\{「［（【『〈《〔｛«‹〘〚〛〙›»〕》〉』】）］」\}\)\]]+$/g,
+            ""
+          );
+
+          if (sentenceTrimmed.length === 0) {
+            return;
+          }
+                
+          const aiText = `${tag} ${sentence}`;
+          const aiTalks = textsToScreenplay([aiText], koeiroParam);
+          aiTextLog += aiText;
+      
+          // Generate & play voice and display response for each sentence
+          const currentAssistantMessage = sentences.join(" ");
+          handleSpeakAi(aiTalks[0], () => {
+            setAssistantMessage(currentAssistantMessage);
+          });
+        }
+      } catch (e) {
+        setChatProcessing(false);
+        console.error(e);
+      }
+    });
+
+    setSocket(_socket);
+
+    return () => {
+      // アンマウント時にソケットを切断
+      _socket.disconnect();
     }
   }, []);
 
@@ -240,117 +172,21 @@ export default function Home() {
     [viewer]
   );
 
-  /**
-   * アシスタントとの会話を行う
-   */
-  const handleSendChat = useCallback(
+  const handleSendChat2 = useCallback(
     async (text: string) => {
-      if (!openAiKey) {
-        setAssistantMessage("APIキーが入力されていません");
-        return;
-      }
-
-      const newMessage = text;
-
-      if (newMessage == null) return;
 
       setChatProcessing(true);
-      // ユーザーの発言を追加して表示
-      const messageLog: Message[] = [
-        ...chatLog,
-        { role: "user", content: newMessage },
-      ];
-      setChatLog(messageLog);
 
-      // Chat GPTへ
-      const messages: Message[] = [
-        {
-          role: "system",
-          content: systemPrompt,
-        },
-        ...messageLog,
-      ];
-
-      const stream = await getChatResponseStream(messages, openAiKey).catch(
-        (e) => {
-          console.error(e);
-          return null;
-        }
-      );
-      if (stream == null) {
-        setChatProcessing(false);
-        return;
-      }
-
-      const reader = stream.getReader();
-      let receivedMessage = "";
-      let aiTextLog = "";
-      let tag = "";
-      const sentences = new Array<string>();
-      try {
-        while (true) {
-          const { done, value } = await reader.read();
-          if (done) break;
-
-          receivedMessage += value;
-
-          // 返答内容のタグ部分の検出
-          const tagMatch = receivedMessage.match(/^\[(.*?)\]/);
-          if (tagMatch && tagMatch[0]) {
-            tag = tagMatch[0];
-            receivedMessage = receivedMessage.slice(tag.length);
-          }
-
-          // 返答を一文単位で切り出して処理する
-          const sentenceMatch = receivedMessage.match(
-            /^(.+[。．！？\n]|.{10,}[、,])/
-          );
-          if (sentenceMatch && sentenceMatch[0]) {
-            const sentence = sentenceMatch[0];
-            sentences.push(sentence);
-            receivedMessage = receivedMessage
-              .slice(sentence.length)
-              .trimStart();
-
-            // 発話不要/不可能な文字列だった場合はスキップ
-            if (
-              !sentence.replace(
-                /^[\s\[\(\{「［（【『〈《〔｛«‹〘〚〛〙›»〕》〉』】）］」\}\)\]]+$/g,
-                ""
-              )
-            ) {
-              continue;
-            }
-
-            const aiText = `${tag} ${sentence}`;
-            const aiTalks = textsToScreenplay([aiText], koeiroParam);
-            aiTextLog += aiText;
-
-            // 文ごとに音声を生成 & 再生、返答を表示
-            const currentAssistantMessage = sentences.join(" ");
-            handleSpeakAi(aiTalks[0], () => {
-              setAssistantMessage(currentAssistantMessage);
-            });
-          }
-        }
-      } catch (e) {
-        setChatProcessing(false);
-        console.error(e);
-      } finally {
-        reader.releaseLock();
-      }
-
-      // アシスタントの返答をログに追加
-      const messageLogAssistant: Message[] = [
-        ...messageLog,
-        { role: "assistant", content: aiTextLog },
-      ];
-
-      setChatLog(messageLogAssistant);
+      socket?.emit("send-comment", {
+        address,
+        username: "test",
+        text,
+        createdAt: Date.now()
+      });
       setChatProcessing(false);
-    },
-    [systemPrompt, chatLog, handleSpeakAi, openAiKey, koeiroParam]
-  );
+
+      
+    }, [systemPrompt, chatLog, handleSpeakAi, openAiKey, koeiroParam]);
 
   return (
     <div className={`${m_plus_2.variable} ${montserrat.variable}`}>
@@ -359,7 +195,7 @@ export default function Home() {
       <VrmViewer />
       <MessageInputContainer
         isChatProcessing={chatProcessing}
-        onChatProcessStart={handleSendChat}
+        onChatProcessStart={handleSendChat2}
       />
       <Menu
         openAiKey={openAiKey}
@@ -375,7 +211,7 @@ export default function Home() {
         handleClickResetSystemPrompt={() => setSystemPrompt(SYSTEM_PROMPT)}
       />
       {/* TODO: モックやめる */}
-      <CommentList comments={mockedComments} />
+      <CommentList comments={liveChat} />
       <div className="absolute top-16 right-16">
         <ConnectButton/>
       </div>
