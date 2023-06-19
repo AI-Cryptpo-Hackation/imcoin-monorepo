@@ -1,18 +1,38 @@
-/** @type {import('tailwindcss').Config} */
+const { light, dark } = require("@charcoal-ui/theme");
+const { createTailwindConfig } = require("@charcoal-ui/tailwind-config");
+/**
+ * @type {import('tailwindcss/tailwind-config').TailwindConfig}
+ */
 module.exports = {
-  content: [
-    './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
-    './src/components/**/*.{js,ts,jsx,tsx,mdx}',
-    './src/app/**/*.{js,ts,jsx,tsx,mdx}',
+  darkMode: true,
+  content: ["./src/**/*.tsx", "./src/**/*.html"],
+  presets: [
+    createTailwindConfig({
+      version: "v3",
+      theme: {
+        ":root": light,
+      },
+    }),
   ],
   theme: {
     extend: {
-      backgroundImage: {
-        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
-        'gradient-conic':
-          'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
+      colors: {
+        primary: "#0000004D",
+        "primary-hover": "#11111199",
+        "primary-press": "#11111199",
+        "primary-disabled": "#00000099",
+        secondary: "#0000004D",
+        "secondary-hover": "#11111199",
+        "secondary-press": "#11111199",
+        "secondary-disabled": "#00000099",
+        base: "#00000099",
+        "text-primary": "#514062",
+      },
+      fontFamily: {
+        M_PLUS_2: ["var(--font-m-plus-2)"],
+        Montserrat: ["var(--font-montserrat)"],
       },
     },
   },
-  plugins: [],
-}
+  plugins: [require("@tailwindcss/line-clamp")],
+};
