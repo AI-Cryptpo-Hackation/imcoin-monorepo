@@ -1,4 +1,4 @@
-import { CommentList } from "@/components/commentList";
+import { Comment, CommentList } from "@/components/commentList";
 import { Introduction } from "@/components/introduction";
 import { Menu } from "@/components/menu";
 import { MessageInputContainer } from "@/components/messageInputContainer";
@@ -17,7 +17,7 @@ import { ConnectButton, } from '@rainbow-me/rainbowkit';
 import { M_PLUS_2, Montserrat } from "next/font/google";
 import { useCallback, useContext, useEffect, useState } from "react";
 import { Socket, io } from "socket.io-client";
-import { useAccount, } from 'wagmi';
+import { useAccount } from 'wagmi';
 
 const CHAT_ENDPOINT = process.env.NEXT_PUBLIC_CHAT_ENDPOINT || 'http://localhost:3001';
 
@@ -57,13 +57,20 @@ export default function Home() {
     }
 
     const _socket = io(CHAT_ENDPOINT);
-    _socket.on('connection', () => {
-      _socket.on('history', (message: Comment) => {
-        setLiveChat(prev => [...prev, message]);
-      }); 
+    _socket.on('history', (messages: Comment[]) => {
+      // TODO: 消す
+      messages.forEach(message => {
+        const randomInt = Math.floor(Math.random() * 10);
+        message.profileImageUrl = `https://i.pravatar.cc/300?img=${randomInt}`;
+      })
+
+      setLiveChat(messages);
     });
 
     _socket.on('comment', (message: Comment) => {
+      // TODO: 消す
+      const randomInt = Math.floor(Math.random() * 10);
+      message.profileImageUrl = `https://i.pravatar.cc/300?img=${randomInt}`;
       setLiveChat(prev => [...prev, message]);
     });
 
@@ -167,8 +174,8 @@ export default function Home() {
 
   const handleSendChat2 = useCallback(
     async (text: string) => {
-      setChatProcessing(true);
 
+      setChatProcessing(true);
 
       socket?.emit("send-comment", {
         address,
