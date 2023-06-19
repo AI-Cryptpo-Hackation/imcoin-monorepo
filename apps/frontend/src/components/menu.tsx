@@ -135,7 +135,6 @@ export const Menu = ({
         />
       )}
       {!showChatLog && assistantMessage && (
-        // TODO actionを差し込む
         <AssistantText message={assistantMessage} action={action}/>
       )}
       <input
