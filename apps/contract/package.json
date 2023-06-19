@@ -5,7 +5,7 @@
   },
   "dependencies": {
     "@openzeppelin/contracts": "^4.8.1",
-    "dotenv": "^16.0.3",
+    "dotenv": "^16.3.1",
     "hardhat": "^2.12.7"
   },
   "devDependencies": {
