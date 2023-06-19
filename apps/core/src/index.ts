@@ -8,10 +8,15 @@ import {
 } from "langchain/schema";
 import { TokenTextSplitter } from "langchain/text_splitter";
 import { ChatCompletionRequestMessageFunctionCall } from "openai";
+import { polygonMumbai } from "viem/chains";
 import { AITuberMemory } from "./memory";
 import { chatPrompt } from "./prompt";
 import { StructuredGoogleTool } from "./tools/google-search";
 import { TokenTool } from "./tools/token-tool";
+import {
+  NonceManager,
+  createNonceManager,
+} from "./tools/token-tool/tx-manager";
 import { WebBrowser } from "./tools/web-browser";
 
 export interface ExecuteAITuberOptions {
@@ -23,11 +28,25 @@ export interface ExecuteAITuberOptions {
   onMessage?: (message: string) => void;
 }
 
+let nonceManager: NonceManager;
+
 export const executeAITuber = async (options: ExecuteAITuberOptions) => {
+  if (!process.env.PRIVATE_KEY) throw new Error("PRIVATE_KEY not set");
+  if (!process.env.TOKEN_ADDRESS) throw new Error("TOKEN_ADDRESS not set");
+  if (!process.env.WALLET_ADDRESS) throw new Error("WALLET_ADDRESS not set");
+
   const { model, modelForTools, messages, summarize, onMessage } = options;
 
+  const chain = polygonMumbai;
+  nonceManager ??= createNonceManager(chain, process.env.WALLET_ADDRESS);
+
   const tools = [
-    new TokenTool(),
+    new TokenTool({
+      chain,
+      nonceManager,
+      privateKey: process.env.PRIVATE_KEY,
+      contractAddress: process.env.TOKEN_ADDRESS,
+    }),
     new StructuredGoogleTool(),
     new WebBrowser(modelForTools || model, options.embeddings),
   ];

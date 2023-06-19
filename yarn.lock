@@ -4938,6 +4938,7 @@ __metadata:
     langchain: ^0.0.95
     tsx: ^3.12.7
     typescript: ^5.0.4
+    viem: ^1.0.7
     zod: ^3.21.4
     zod-to-json-schema: ^3.21.1
   languageName: unknown
