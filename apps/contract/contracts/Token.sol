@@ -8,6 +8,8 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC20/extensions/draft-ERC20Permit.sol";
 
 contract IMCToken is ERC20, ERC20Burnable, Pausable, Ownable, ERC20Permit {
+    event UpdateScalar(uint256 newScalar);
+
     uint256 public scalar = 10 ** 8; // 1 IMC = 10 ** decimal / scalar
 
     constructor() ERC20("I'm Coin.", "IMC") ERC20Permit("I'm Coin.") {}
@@ -33,6 +35,12 @@ contract IMCToken is ERC20, ERC20Burnable, Pausable, Ownable, ERC20Permit {
     function balanceOf(address account) public view override returns (uint256) {
         uint256 amount = super.balanceOf(account);
         return amount / scalar;
+    }
+
+    function setScalar(uint256 newScalar) public onlyOwner {
+        require(newScalar > 0, "IMCToken: new scalar is 0");
+        scalar = newScalar;
+        emit UpdateScalar(newScalar);
     }
 
     function _beforeTokenTransfer(address from, address to, uint256 amount)
