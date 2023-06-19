@@ -15,13 +15,14 @@ const server = serve({
   fetch: app.fetch,
   port: 3001,
 });
-const io = new Server(server);
+const io = new Server(server, {
+  cors: {
+    origin: "*",
+  }
+});
 console.log("Server started at http://localhost:3001 (default)")
 
-// TODO: CORSの設定が全く効かない！！！！なんで！！！！
-app.use('/*', cors({
-  origin: 'http://localhost:3000',
-}));
+app.use('/*', cors({ origin: '*'}));
 app.use("/static/*", serveStatic({ root: "./" }));
 app.get("/", (c) => c.text("Hello Node.js!"));
 app.all("/teapot", (c) => c.text("I'm a teapot!", 418));
