@@ -10,6 +10,7 @@ import { Settings } from "./settings";
 type Props = {
   chatName: string;
   systemPrompt: string;
+  action: string;
   chatLog: Message[];
   koeiroParam: KoeiroParam;
   assistantMessage: string;
@@ -23,6 +24,7 @@ type Props = {
 export const Menu = ({
   chatName,
   systemPrompt,
+  action,
   chatLog,
   koeiroParam,
   assistantMessage,
@@ -134,7 +136,7 @@ export const Menu = ({
       )}
       {!showChatLog && assistantMessage && (
         // TODO actionを差し込む
-        <AssistantText message={assistantMessage} />
+        <AssistantText message={assistantMessage} action={action}/>
       )}
       <input
         type="file"

@@ -44,6 +44,7 @@ export default function Home() {
   const [assistantMessage, setAssistantMessage] = useState("");
   const [socket, setSocket] = useState<Socket | null>(null);
   const [liveChat, setLiveChat] = useState<Comment[]>([]);
+  const [action, setAction] = useState<string>("");
   const { address } = useAccount();
 
   useEffect(() => {
@@ -72,6 +73,14 @@ export default function Home() {
       const randomInt = Math.floor(Math.random() * 10);
       message.profileImageUrl = `https://i.pravatar.cc/300?img=${randomInt}`;
       setLiveChat(prev => [...prev, message]);
+    });
+
+    _socket.on('action', (data) => {
+      setAction(data.action);
+    });
+
+    _socket.on('action-history', (data) => {
+      setAction(data.action);
     });
 
     _socket.on("liver-update", (message: any) => {
@@ -199,6 +208,7 @@ export default function Home() {
       />
       <Menu
         chatName={chatName}
+        action={action}
         systemPrompt={systemPrompt}
         chatLog={chatLog}
         koeiroParam={koeiroParam}
@@ -210,7 +220,6 @@ export default function Home() {
         handleClickResetChatLog={() => setChatLog([])}
         handleClickResetSystemPrompt={() => setSystemPrompt(SYSTEM_PROMPT)}
       />
-      {/* TODO: モックやめる */}
       <CommentList comments={liveChat} />
       <div className="absolute top-16 right-16">
         <ConnectButton/>
