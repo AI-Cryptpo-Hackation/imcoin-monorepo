@@ -32,8 +32,69 @@ describe("Token", function () {
       expect(await imctoken.balanceOf(liver.address)).to.equal(liverBalance);
     });
   });
+  describe("Token functions", function () {
+    it("Should change power correctly", async function () {
+      const { imctoken, liver, otherAccount } = await loadFixture(
+        deployOneYearLockFixture
+      );
+      const newPower = 10 ** 7; // new power value
+      await imctoken.connect(liver).setPower(newPower);
+      expect(await imctoken.power()).to.equal(newPower);
+      expect(await imctoken.balanceOf(liver.address)).to.equal(
+        ethers.utils.parseUnits("10000000", 18)
+      );
 
-  describe("Events", function () {});
+      await imctoken
+        .connect(liver)
+        .mint(otherAccount.address, ethers.utils.parseUnits("1000", 18));
+      expect(await imctoken.balanceOf(otherAccount.address)).to.equal(
+        ethers.utils.parseUnits("1000", 18)
+      );
 
-  describe("Transfers", function () {});
+      const newPower2 = 10 ** 8; // new power value
+      await imctoken.connect(liver).setPower(newPower2);
+      expect(await imctoken.power()).to.equal(newPower2);
+      expect(await imctoken.balanceOf(liver.address)).to.equal(
+        ethers.utils.parseUnits("1000000", 18)
+      );
+      expect(await imctoken.balanceOf(otherAccount.address)).to.equal(
+        ethers.utils.parseUnits("100", 18)
+      );
+    });
+
+    it("Should mint new tokens correctly", async function () {
+      const { imctoken, liver, otherAccount } = await loadFixture(
+        deployOneYearLockFixture
+      );
+      const mintAmount = ethers.utils.parseUnits("500", 18);
+      await imctoken.connect(liver).mint(otherAccount.address, mintAmount);
+      expect(await imctoken.balanceOf(otherAccount.address)).to.equal(
+        mintAmount
+      );
+    });
+
+    it("Should burn tokens correctly", async function () {
+      const { imctoken, liver } = await loadFixture(deployOneYearLockFixture);
+      const burnAmount = ethers.utils.parseUnits("500", 18);
+      await imctoken
+        .connect(liver)
+        ["burn(address,uint256)"](liver.address, burnAmount);
+      expect(await imctoken.balanceOf(liver.address)).to.equal(
+        ethers.utils.parseUnits("1000000", 18).sub(burnAmount)
+      );
+    });
+
+    it("Should transfer tokens correctly", async function () {
+      const { imctoken, liver, otherAccount } = await loadFixture(
+        deployOneYearLockFixture
+      );
+      const transferAmount = ethers.utils.parseUnits("500", 18);
+      await imctoken
+        .connect(liver)
+        .transfer(otherAccount.address, transferAmount);
+      expect(await imctoken.balanceOf(otherAccount.address)).to.equal(
+        transferAmount
+      );
+    });
+  });
 });

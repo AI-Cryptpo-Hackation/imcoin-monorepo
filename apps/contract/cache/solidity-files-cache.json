@@ -37,8 +37,8 @@
       ]
     },
     "C:\\Users\\rinta\\Documents\\GitHub\\imcoin-monorepo\\apps\\contract\\contracts\\Token.sol": {
-      "lastModificationDate": 1687181468245,
-      "contentHash": "75ef5549c46563a4c9d86b0e6ca8c493",
+      "lastModificationDate": 1687184324308,
+      "contentHash": "787d3cf0512d6d4e4e971c13e449f835",
       "sourceName": "contracts/Token.sol",
       "solcConfig": {
         "version": "0.8.19",

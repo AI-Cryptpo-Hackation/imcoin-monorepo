@@ -14,9 +14,9 @@ contract IMCToken is
     AccessControl,
     ERC20Permit
 {
-    event UpdateScalar(uint256 newScalar);
+    event UpdatePower(uint256 newPower);
 
-    uint256 public scalar = 10 ** 8; // 1 IMC = 10 ** decimal / scalar
+    uint256 public power = 10 ** 8; // 1 IMC = 10 ** decimal / power
     bytes32 public constant LIVER_ROLE = keccak256("LIVER_ROLE");
 
     constructor(
@@ -36,7 +36,7 @@ contract IMCToken is
     }
 
     function _mint(address to, uint256 amount) internal override {
-        uint amount_ = amount * scalar;
+        uint amount_ = amount * power;
         super._mint(to, amount_);
     }
 
@@ -45,7 +45,7 @@ contract IMCToken is
     }
 
     function _burn(address from, uint256 amount) internal override {
-        uint amount_ = amount * scalar;
+        uint amount_ = amount * power;
         super._burn(from, amount_);
     }
 
@@ -58,32 +58,24 @@ contract IMCToken is
         address to,
         uint256 amount
     ) internal override {
-        uint amount_ = amount * scalar;
+        uint amount_ = amount * power;
         super._transfer(from, to, amount_);
-    }
-
-    function transfer(
-        address from,
-        address to,
-        uint256 amount
-    ) public onlyRole(LIVER_ROLE) {
-        _transfer(from, to, amount);
     }
 
     function totalSupply() public view override returns (uint256) {
         uint256 amount = super.totalSupply();
-        return amount / scalar;
+        return amount / power;
     }
 
     function balanceOf(address account) public view override returns (uint256) {
         uint256 amount = super.balanceOf(account);
-        return amount / scalar;
+        return amount / power;
     }
 
-    function setScalar(uint256 newScalar) public onlyRole(LIVER_ROLE) {
-        require(newScalar > 0, "IMCToken: new scalar is 0");
-        scalar = newScalar;
-        emit UpdateScalar(newScalar);
+    function setPower(uint256 newPower) public onlyRole(LIVER_ROLE) {
+        //require(newPower > 0, "IMCToken: new power is 0");
+        power = newPower;
+        emit UpdatePower(newPower);
     }
 
     function _beforeTokenTransfer(
