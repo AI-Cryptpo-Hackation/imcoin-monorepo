@@ -76,10 +76,12 @@ export default function Home() {
     });
 
     _socket.on('action', (data) => {
+      if (!data) return;
       setAction(data.action);
     });
 
     _socket.on('action-history', (data) => {
+      if (!data) return;
       setAction(data.action);
     });
 
@@ -183,7 +185,6 @@ export default function Home() {
 
   const handleSendChat2 = useCallback(
     async (text: string) => {
-
       setChatProcessing(true);
 
       socket?.emit("send-comment", {
@@ -193,9 +194,7 @@ export default function Home() {
         createdAt: Date.now()
       });
       setChatProcessing(false);
-
-      
-    }, [systemPrompt, chatLog, handleSpeakAi, koeiroParam]);
+    }, [chatName]);
 
   return (
     <div className={`${m_plus_2.variable} ${montserrat.variable}`}>
