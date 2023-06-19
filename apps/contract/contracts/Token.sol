@@ -23,13 +23,11 @@ contract IMCToken is ERC20, ERC20Burnable, Pausable, Ownable, ERC20Permit {
     }
 
     function mint(address to, uint256 amount) public onlyOwner {
-        uint amount_ = amount * scalar;
-        _mint(to, amount_);
+        _mint(to, amount);
     }
 
     function burn(address from, uint256 amount) public onlyOwner {
-        uint amount_ = amount * scalar;
-        _burn(from, amount_);
+        _burn(from, amount);
     }
 
     function balanceOf(address account) public view override returns (uint256) {
