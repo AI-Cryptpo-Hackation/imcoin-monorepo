@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useEffect, useRef } from "react";
 
 export type Comment = {
   address: string;
@@ -13,6 +13,11 @@ type Props = {
 }
 
 export const CommentList: FC<Props> = ({ comments }) => {
+  const messagesEndRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [comments]);
 
   return (
     <div className="absolute right-16 mt-[80px] w-[462px] overflow-y-auto max-h-[450px]">
@@ -26,6 +31,7 @@ export const CommentList: FC<Props> = ({ comments }) => {
             </div>
           </div>
         ))}
+        <div ref={messagesEndRef} />
       </div>
     </div>
   );
