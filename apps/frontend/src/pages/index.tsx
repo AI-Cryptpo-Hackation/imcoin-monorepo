@@ -37,7 +37,7 @@ export default function Home() {
   const { viewer } = useContext(ViewerContext);
 
   const [systemPrompt, setSystemPrompt] = useState(SYSTEM_PROMPT);
-  const [openAiKey, setOpenAiKey] = useState("");
+  const [chatName, setChatName] = useState("");
   const [koeiroParam, setKoeiroParam] = useState<KoeiroParam>(DEFAULT_PARAM);
   const [chatProcessing, setChatProcessing] = useState(false);
   const [chatLog, setChatLog] = useState<Message[]>([]);
@@ -179,31 +179,31 @@ export default function Home() {
 
       socket?.emit("send-comment", {
         address,
-        username: "test",
+        username: chatName,
         text,
         createdAt: Date.now()
       });
       setChatProcessing(false);
 
       
-    }, [systemPrompt, chatLog, handleSpeakAi, openAiKey, koeiroParam]);
+    }, [systemPrompt, chatLog, handleSpeakAi, koeiroParam]);
 
   return (
     <div className={`${m_plus_2.variable} ${montserrat.variable}`}>
       <Meta />
-      <Introduction openAiKey={openAiKey} onChangeAiKey={setOpenAiKey} />
+      <Introduction chatName={chatName} onChangeChatName={setChatName} />
       <VrmViewer />
       <MessageInputContainer
         isChatProcessing={chatProcessing}
         onChatProcessStart={handleSendChat2}
       />
       <Menu
-        openAiKey={openAiKey}
+        chatName={chatName}
         systemPrompt={systemPrompt}
         chatLog={chatLog}
         koeiroParam={koeiroParam}
         assistantMessage={assistantMessage}
-        onChangeAiKey={setOpenAiKey}
+        onChangeChatName={setChatName}
         onChangeSystemPrompt={setSystemPrompt}
         onChangeChatLog={handleChangeChatLog}
         onChangeKoeiromapParam={setKoeiroParam}
