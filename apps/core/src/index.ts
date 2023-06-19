@@ -11,6 +11,7 @@ import { ChatCompletionRequestMessageFunctionCall } from "openai";
 import { AITuberMemory } from "./memory";
 import { chatPrompt } from "./prompt";
 import { StructuredGoogleTool } from "./tools/google-search";
+import { TokenTool } from "./tools/token-tool";
 import { WebBrowser } from "./tools/web-browser";
 
 export interface ExecuteAITuberOptions {
@@ -26,6 +27,7 @@ export const executeAITuber = async (options: ExecuteAITuberOptions) => {
   const { model, modelForTools, messages, summarize, onMessage } = options;
 
   const tools = [
+    new TokenTool(),
     new StructuredGoogleTool(),
     new WebBrowser(modelForTools || model, options.embeddings),
   ];
@@ -63,7 +65,9 @@ export const executeAITuber = async (options: ExecuteAITuberOptions) => {
 
       const toolNames = function_call.name || "";
       const tool = tools.find((t) => t.name === toolNames);
+
       if (!tool) continue;
+      console.log("Liver use:", toolNames, function_call.arguments);
       const observation = await tool?.call(
         JSON.parse(function_call.arguments || "{}")
       );
