@@ -5,7 +5,7 @@ import dotenv from "dotenv";
 import { Hono } from "hono";
 import { cors } from 'hono/cors';
 import { Server } from "socket.io";
-import { Comment, Liver } from "./models";
+import { Action, Comment, Liver } from "./models";
 
 dotenv.config();
 
@@ -30,6 +30,7 @@ app.all("/teapot", (c) => c.text("I'm a teapot!", 418));
 io.on("connection", async (socket) => {
   console.log('a user connected');
   socket.emit("history", await Comment.getHistorySnapshot());
+  socket.emit("action-history", await Action.getHistorySnapshot());
   socket.on("send-comment", async (data) => {
     await Comment.send(data);
   });
@@ -44,4 +45,8 @@ Comment.on("new", (comment) => {
 
 Liver.on("new", (liver) => {
   io.emit("liver-update", liver.snapshot());
+});
+
+Action.on("new", (action) => {
+  io.emit("action", action.snapshot());
 });
