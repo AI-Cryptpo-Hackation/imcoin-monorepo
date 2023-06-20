@@ -8,26 +8,28 @@ import { IconButton } from "./iconButton";
 import { Settings } from "./settings";
 
 type Props = {
-  openAiKey: string;
+  chatName: string;
   systemPrompt: string;
+  action: string;
   chatLog: Message[];
   koeiroParam: KoeiroParam;
   assistantMessage: string;
   onChangeSystemPrompt: (systemPrompt: string) => void;
-  onChangeAiKey: (key: string) => void;
+  onChangeChatName: (key: string) => void;
   onChangeChatLog: (index: number, text: string) => void;
   onChangeKoeiromapParam: (param: KoeiroParam) => void;
   handleClickResetChatLog: () => void;
   handleClickResetSystemPrompt: () => void;
 };
 export const Menu = ({
-  openAiKey,
+  chatName,
   systemPrompt,
+  action,
   chatLog,
   koeiroParam,
   assistantMessage,
   onChangeSystemPrompt,
-  onChangeAiKey,
+  onChangeChatName,
   onChangeChatLog,
   onChangeKoeiromapParam,
   handleClickResetChatLog,
@@ -45,11 +47,11 @@ export const Menu = ({
     [onChangeSystemPrompt]
   );
 
-  const handleAiKeyChange = useCallback(
+  const handleChatNameChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
-      onChangeAiKey(event.target.value);
+      onChangeChatName(event.target.value);
     },
-    [onChangeAiKey]
+    [onChangeChatName]
   );
 
   const handleChangeKoeiroParam = useCallback(
@@ -118,12 +120,12 @@ export const Menu = ({
       {showChatLog && <ChatLog messages={chatLog} />}
       {showSettings && (
         <Settings
-          openAiKey={openAiKey}
+          chatName={chatName}
           chatLog={chatLog}
           systemPrompt={systemPrompt}
           koeiroParam={koeiroParam}
           onClickClose={() => setShowSettings(false)}
-          onChangeAiKey={handleAiKeyChange}
+          onChangeChatName={handleChatNameChange}
           onChangeSystemPrompt={handleChangeSystemPrompt}
           onChangeChatLog={onChangeChatLog}
           onChangeKoeiroParam={handleChangeKoeiroParam}
@@ -133,8 +135,7 @@ export const Menu = ({
         />
       )}
       {!showChatLog && assistantMessage && (
-        // TODO actionを差し込む
-        <AssistantText message={assistantMessage} />
+        <AssistantText message={assistantMessage} action={action}/>
       )}
       <input
         type="file"

@@ -40,7 +40,8 @@ export class Comment extends HyperObject<CommentProps> {
 
   static async getHistorySnapshot() {
     const comments = await Comment.query().order("createdAt", "desc").limit(20);
-    return comments.map((c) => c.snapshot());
+    // YouTubeとかに習ってASCにする
+    return comments.map((c) => c.snapshot()).reverse();
   }
 
   toHumanChatMessage() {
@@ -92,3 +93,30 @@ export class Liver extends HyperObject<LiverProps> {
     console.log("Liver summarized:", summarize);
   }
 }
+
+export const ActionSchema = $object({
+  action: $string,
+  createdAt: (v: any): v is Date => v instanceof Date,
+});
+
+export type ActionProps = Infer<typeof ActionSchema>;
+
+export class Action extends HyperObject<ActionProps> {
+  static type = "action";
+  static schema = ActionSchema;
+
+  static async send(action: string) {
+    const _action = await Action.new({
+      action,
+      createdAt: new Date(),
+    });
+
+    return _action;
+  }
+
+  static async getHistorySnapshot() {
+    const action = await Action.query().order("createdAt", "desc").first();
+    return action?.snapshot();
+  }
+}
+
