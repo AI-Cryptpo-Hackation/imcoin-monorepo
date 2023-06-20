@@ -1,6 +1,7 @@
 import { StructuredTool } from "langchain/tools";
 import type { Address, GetContractReturnType, PublicClient } from "viem";
 import {
+  RpcError,
   createPublicClient,
   createWalletClient,
   getContract,
@@ -43,6 +44,7 @@ export interface TokenToolProps {
   nonceManager: NonceManager;
   privateKey: string;
   contractAddress: string;
+  rpc?: string;
 }
 
 export class TokenTool extends StructuredTool {
@@ -69,12 +71,12 @@ export class TokenTool extends StructuredTool {
 
     const publicClient = createPublicClient({
       chain,
-      transport: http(),
+      transport: http(props.rpc),
     });
     const walletClient = createWalletClient({
       account: privateKeyToAccount(privateKey as `0x${string}`),
       chain,
-      transport: http(),
+      transport: http(props.rpc),
     });
 
     const readContract = getContract({
@@ -153,19 +155,22 @@ export class TokenTool extends StructuredTool {
 
   async _call({ mint, burn, mul_all_balance }: z.infer<typeof this.schema>) {
     let results: string[] = [];
+    try {
+      for (const action of mint || []) {
+        results.push(await this.mint(action));
+      }
 
-    for (const action of mint || []) {
-      results.push(await this.mint(action));
+      for (const action of burn || []) {
+        results.push(await this.burn(action));
+      }
+
+      if (mul_all_balance) {
+        results.push(await this.mulAllBalance(mul_all_balance));
+      }
+
+      return results.join("\n");
+    } catch (e) {
+      return (e as RpcError).shortMessage;
     }
-
-    for (const action of burn || []) {
-      results.push(await this.burn(action));
-    }
-
-    if (mul_all_balance) {
-      results.push(await this.mulAllBalance(mul_all_balance));
-    }
-
-    return results.join("\n");
   }
 }

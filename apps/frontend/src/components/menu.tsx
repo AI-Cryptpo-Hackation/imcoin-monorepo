@@ -1,6 +1,7 @@
 import { KoeiroParam } from "@/features/constants/koeiroParam";
 import { Message } from "@/features/messages/messages";
 import { ViewerContext } from "@/features/vrmViewer/viewerContext";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
 import React, { useCallback, useContext, useRef, useState } from "react";
 import { AssistantText } from "./assistantText";
 import { ChatLog } from "./chatLog";
@@ -91,30 +92,34 @@ export const Menu = ({
 
   return (
     <>
-      <div className="absolute z-10 m-24">
-        <div className="grid grid-flow-col gap-[8px]">
-          <IconButton
-            iconName="24/Menu"
-            label="設定"
-            isProcessing={false}
-            onClick={() => setShowSettings(true)}
-          ></IconButton>
-          {showChatLog ? (
+      <div className="absolute z-10 w-full">
+        <div className="flex m-8 screen2:m-16 gap-[8px]">
+          <div className="flex-1 flex gap-[8px]">
             <IconButton
-              iconName="24/CommentOutline"
-              label="会話ログ"
+              iconName="24/Menu"
+              label="設定"
               isProcessing={false}
-              onClick={() => setShowChatLog(false)}
-            />
-          ) : (
-            <IconButton
-              iconName="24/CommentFill"
-              label="会話ログ"
-              isProcessing={false}
-              disabled={chatLog.length <= 0}
-              onClick={() => setShowChatLog(true)}
-            />
-          )}
+              onClick={() => setShowSettings(true)}
+            ></IconButton>
+            {/* {showChatLog ? (
+              <IconButton
+                iconName="24/CommentOutline"
+                label="会話ログ"
+                isProcessing={false}
+                onClick={() => setShowChatLog(false)}
+              />
+            ) : (
+              <IconButton
+                iconName="24/CommentFill"
+                label="会話ログ"
+                isProcessing={false}
+                disabled={chatLog.length <= 0}
+                onClick={() => setShowChatLog(true)}
+              />
+            )}*/}
+          </div>
+
+          <ConnectButton />
         </div>
       </div>
       {showChatLog && <ChatLog messages={chatLog} />}
@@ -135,7 +140,7 @@ export const Menu = ({
         />
       )}
       {!showChatLog && assistantMessage && (
-        <AssistantText message={assistantMessage} action={action}/>
+        <AssistantText message={assistantMessage} action={action} />
       )}
       <input
         type="file"

@@ -59,9 +59,7 @@ export class NonceManager {
   async sendTx<T>(txCb: (nonce: number) => Promise<T>): Promise<T> {
     const noncePromise = this.getNonce("pending");
     this.increment();
-    console.log(await noncePromise);
     const tx = await txCb(await noncePromise);
-
     return tx;
   }
 }

@@ -34,6 +34,7 @@ export const executeAITuber = async (options: ExecuteAITuberOptions) => {
   if (!process.env.PRIVATE_KEY) throw new Error("PRIVATE_KEY not set");
   if (!process.env.TOKEN_ADDRESS) throw new Error("TOKEN_ADDRESS not set");
   if (!process.env.WALLET_ADDRESS) throw new Error("WALLET_ADDRESS not set");
+  if (!process.env.JSON_RPC) throw new Error("JSON_RPC not set");
 
   const { model, modelForTools, messages, summarize, onMessage } = options;
 
@@ -43,6 +44,7 @@ export const executeAITuber = async (options: ExecuteAITuberOptions) => {
   const tools = [
     new TokenTool({
       chain,
+      rpc: process.env.JSON_RPC,
       nonceManager,
       privateKey: process.env.PRIVATE_KEY,
       contractAddress: process.env.TOKEN_ADDRESS,
