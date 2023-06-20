@@ -20,13 +20,13 @@ export const CommentList: FC<Props> = ({ comments }) => {
   }, [comments]);
 
   return (
-    <div className="absolute right-16 mt-[80px] w-[462px] overflow-y-auto max-h-[450px]">
-      <div className="mx-auto max-w-4xl w-full p-16 flex-wrap bg-black bg-opacity-60">
 
+    <div className="screen2:absolute right-16 top-104">
+      <div className="max-w-4xl w-full p-16 flex-wrap bg-black screen2:bg-opacity-60 screen2:rounded-8 h-[30svh] overflow-y-auto">
         {comments.map((comment, index) => (
           <div key={index} className="py-4">
-            <div className="flex flex-row w-[462px]">
-              <img src={comment.profileImageUrl} alt={comment.username} className="bg-white object-cover h-24 w-24 rounded-[32px] m-4"/>
+            <div className="flex flex-row">
+              <img src={comment.profileImageUrl} alt={comment.username} className="bg-white object-cover h-24 w-24 rounded-[32px] m-4" />
               <span className="px-4 text-white break-words typography-4 font-M_PLUS_2 whitespace-pre-wrap overflow-wrap-break-word">{comment.username}: {comment.text}</span>
             </div>
           </div>
@@ -34,5 +34,6 @@ export const CommentList: FC<Props> = ({ comments }) => {
         <div ref={messagesEndRef} />
       </div>
     </div>
+
   );
 };

@@ -13,7 +13,6 @@ import {
 } from "@/features/messages/messages";
 import { speakCharacter } from "@/features/messages/speakCharacter";
 import { ViewerContext } from "@/features/vrmViewer/viewerContext";
-import { ConnectButton, } from '@rainbow-me/rainbowkit';
 import { M_PLUS_2, Montserrat } from "next/font/google";
 import { useCallback, useContext, useEffect, useState } from "react";
 import { Socket, io } from "socket.io-client";
@@ -86,24 +85,24 @@ export default function Home() {
     });
 
     _socket.on("liver-update", (message: any) => {
-      let {response: receivedMessage} = message;
+      let { response: receivedMessage } = message;
       try {
         if (receivedMessage == null) {
           setChatProcessing(false);
           return;
         }
-      
+
         let aiTextLog = "";
         let tag = "";
         const sentences = new Array<string>();
-      
+
         // Detecting tag in the response content
         const tagMatch = receivedMessage.match(/^\[(.*?)\]/);
         if (tagMatch && tagMatch[0]) {
           tag = tagMatch[0];
           receivedMessage = receivedMessage.slice(tag.length);
         }
-      
+
         // Processing the response sentence by sentence
         const sentenceMatch = receivedMessage.match(
           /^(.+[。．！？\n]|.{10,}[、,])/
@@ -114,7 +113,7 @@ export default function Home() {
           receivedMessage = receivedMessage
             .slice(sentence.length)
             .trimStart();
-      
+
           // Skip if the string was unpronounceable/unneeded for utterance
           const sentenceTrimmed = sentence.replace(
             /^[\s\[\(\{「［（【『〈《〔｛«‹〘〚〛〙›»〕》〉』】）］」\}\)\]]+$/g,
@@ -124,11 +123,11 @@ export default function Home() {
           if (sentenceTrimmed.length === 0) {
             return;
           }
-                
+
           const aiText = `${tag} ${sentence}`;
           const aiTalks = textsToScreenplay([aiText], koeiroParam);
           aiTextLog += aiText;
-      
+
           // Generate & play voice and display response for each sentence
           const currentAssistantMessage = sentences.join(" ");
           handleSpeakAi(aiTalks[0], () => {
@@ -197,14 +196,11 @@ export default function Home() {
     }, [chatName]);
 
   return (
-    <div className={`${m_plus_2.variable} ${montserrat.variable}`}>
+    <div className={`${m_plus_2.variable} ${montserrat.variable} relative flex flex-col h-[100svh] overflow-hidden`}>
       <Meta />
       <Introduction chatName={chatName} onChangeChatName={setChatName} />
       <VrmViewer />
-      <MessageInputContainer
-        isChatProcessing={chatProcessing}
-        onChatProcessStart={handleSendChat2}
-      />
+
       <Menu
         chatName={chatName}
         action={action}
@@ -220,9 +216,10 @@ export default function Home() {
         handleClickResetSystemPrompt={() => setSystemPrompt(SYSTEM_PROMPT)}
       />
       <CommentList comments={liveChat} />
-      <div className="absolute top-16 right-16">
-        <ConnectButton/>
-      </div>
+      <MessageInputContainer
+        isChatProcessing={chatProcessing}
+        onChatProcessStart={handleSendChat2}
+      />
     </div>
   );
 }

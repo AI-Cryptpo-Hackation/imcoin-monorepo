@@ -1,6 +1,6 @@
-import { useContext, useCallback } from "react";
-import { ViewerContext } from "../features/vrmViewer/viewerContext";
 import { buildUrl } from "@/utils/buildUrl";
+import { useCallback, useContext } from "react";
+import { ViewerContext } from "../features/vrmViewer/viewerContext";
 
 export default function VrmViewer() {
   const { viewer } = useContext(ViewerContext);
@@ -42,7 +42,7 @@ export default function VrmViewer() {
   );
 
   return (
-    <div className={"absolute top-0 left-0 w-screen h-[100svh] -z-10"}>
+    <div className={"flex-1 sm:fixed sm:inset-0 overflow-hidden"}>
       <canvas ref={canvasRef} className={"h-full w-full"}></canvas>
     </div>
   );
