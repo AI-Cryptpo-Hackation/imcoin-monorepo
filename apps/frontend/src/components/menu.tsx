@@ -101,7 +101,7 @@ export const Menu = ({
               isProcessing={false}
               onClick={() => setShowSettings(true)}
             ></IconButton>
-            {showChatLog ? (
+            {/* {showChatLog ? (
               <IconButton
                 iconName="24/CommentOutline"
                 label="会話ログ"
@@ -116,7 +116,8 @@ export const Menu = ({
                 disabled={chatLog.length <= 0}
                 onClick={() => setShowChatLog(true)}
               />
-            )}</div>
+            )}*/}
+          </div>
 
           <ConnectButton />
         </div>
